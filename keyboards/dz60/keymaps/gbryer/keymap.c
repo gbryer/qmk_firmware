@@ -4,6 +4,8 @@
 
 uint16_t last_keycode;
 
+#define KC_FUNCTION(KEY) LT(_FUNCTION, KEY)
+
 enum layers {
     _DEFAULT = 0,
     _MAIN = 0,
@@ -38,17 +40,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_MAIN] = LAYOUT(
             KC_GESC, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSLS, KC_DEL,
             KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSPC,
-            KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,
+            KC_F14, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,
             OSM(MOD_LSFT),OSM(MOD_LSFT),KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, OSM(MOD_RSFT), KC_HOME,
-            KC_LCTL, KC_LGUI, KC_LALT,                   KC_SPC,  OSL(_FUNCTION),  KC_SPC,           KC_LEFT, KC_UP, KC_DOWN, KC_RIGHT,   KC_END
+            KC_LCTL, KC_LGUI, KC_LALT,                   KC_SPC,  KC_FUNCTION(KC_SPC),  KC_SPC,           KC_LEFT, KC_UP, KC_DOWN, KC_RIGHT,   KC_END
     ),
 
     [_GAMING] = LAYOUT(
             KC_GESC, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSLS, KC_DEL,
             KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSPC,
-            KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_GAME_CHAT,
+            KC_F14, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_GAME_CHAT,
             KC_LSFT, KC_LSFT,KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT, KC_HOME,
-            KC_LCTL, KC_LGUI, KC_LALT,                   KC_SPC,  OSL(_FUNCTION),  KC_SPC,           KC_LEFT, KC_UP, KC_DOWN, KC_RIGHT,   KC_END
+            KC_LCTL, KC_LGUI, KC_LALT,                   KC_SPC,  KC_FUNCTION(KC_F15),  KC_SPC,           KC_LEFT, KC_UP, KC_DOWN, KC_RIGHT,   KC_END
     ),
 
     [_FUNCTION] = LAYOUT(
