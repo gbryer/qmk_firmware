@@ -113,12 +113,13 @@ qk_tap_dance_action_t tap_dance_actions[] = {
         [DOT_TD]  = ACTION_TAP_DANCE_FN_ADVANCED(sentence_end, sentence_end_finished, NULL),
 };
 
-static void add_braces(const char* str, const uint8_t mods) {
+static void add_braces(const char* str, const uint8_t mods, const uint8_t oneshot_mods) {
     clear_mods();  // Temporarily disable mods.
     clear_oneshot_mods();
     SEND_STRING(str);
     tap_code(KC_LEFT);  // Move cursor between braces.
     set_mods(mods);  // Restore mods.
+    set_oneshot_mods(oneshot_mods);
 }
 
 // KC_GAME_CHAT: A key that taps enter to enable chat in-game, and temporarily toggles typing layer
@@ -202,9 +203,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case KC_LBRC:
             if (pressed) {
                 if ((mods | oneshot_mods) & MOD_MASK_SHIFT) {
-                    add_braces("{}", mods);
+                    add_braces("{}", mods, oneshot_mods);
                 } else {
-                    add_braces("[]", mods);
+                    add_braces("[]", mods, oneshot_mods);
                 }
             }
             return false;
@@ -212,7 +213,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case KC_9:
             if (pressed) {
                 if ((mods | oneshot_mods) & MOD_MASK_SHIFT) {
-                    add_braces("()", mods);
+                    add_braces("()", mods, oneshot_mods);
                 } else {
                     return true;
                 }
@@ -222,7 +223,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case KC_COMM:
             if (pressed) {
                 if ((mods | oneshot_mods) & MOD_MASK_SHIFT) {
-                    add_braces("<>", mods);
+                    add_braces("<>", mods, oneshot_mods);
                 } else {
                     return true;
                 }
