@@ -1,6 +1,8 @@
 #include QMK_KEYBOARD_H
 #include "features/select_word.h"
 #include <stdio.h>
+#include "quantum.h"
+#include "send_string.h"
 
 uint16_t last_keycode;
 
@@ -20,20 +22,26 @@ enum custom_keycodes {
     KC_TAUNT_MODE // https://github.com/daniel5151/qmk_firmware/blob/discipline/keyboards/coseyfannitutti/discipline/keymaps/prilik/keymap.c#L145
 };
 
-#ifdef TAP_DANCE_ENABLE
     enum {
         DOT_TD = 0,
     };
-    #define TD_DOT TD(DOT_TD)
-#else
-#define TD_DOT KC_DOT
-#endif
+
 
 bool game_chat_set;
 void game_chat_enable(void);
 void game_chat_disable(void);
 
+static void sentence_end(qk_tap_dance_state_t *state, void *user_data);
+void sentence_end_finished (qk_tap_dance_state_t *state, void *user_data);
+
+
 bool taunt_mode_set = false;
+
+// Tap Dance definitions
+qk_tap_dance_action_t tap_dance_actions[] = {
+        [DOT_TD]  = ACTION_TAP_DANCE_FN_ADVANCED(sentence_end, sentence_end_finished, NULL),
+};
+
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -41,7 +49,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
             KC_GESC, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSLS, KC_DEL,
             KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSPC,
             KC_F14, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,
-            OSM(MOD_LSFT),OSM(MOD_LSFT),KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, OSM(MOD_RSFT), KC_HOME,
+            OSM(MOD_LSFT),OSM(MOD_LSFT),KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, TD(DOT_TD),  KC_SLSH, OSM(MOD_RSFT), KC_HOME,
             KC_LCTL, OSM(MOD_LGUI), KC_LALT,                   KC_SPC,  KC_FUNCTION(KC_SPC),  KC_SPC,           KC_LEFT, KC_UP, KC_DOWN, KC_RIGHT,   KC_END
     ),
 
@@ -110,15 +118,12 @@ void sentence_end_finished (qk_tap_dance_state_t *state, void *user_data) {
     last_keycode = KC_DOT;
 }
 
-// Tap Dance definitions
-qk_tap_dance_action_t tap_dance_actions[] = {
-        [DOT_TD]  = ACTION_TAP_DANCE_FN_ADVANCED(sentence_end, sentence_end_finished, NULL),
-};
 
 static void add_braces(const char* str, const uint8_t mods, const uint8_t oneshot_mods) {
     clear_mods();  // Temporarily disable mods.
     clear_oneshot_mods();
-    SEND_STRING(str);
+//    SEND_STRING(str);
+    send_string_P(str);
     tap_code(KC_LEFT);  // Move cursor between braces.
     set_mods(mods);  // Restore mods.
     set_oneshot_mods(oneshot_mods);
@@ -205,9 +210,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case KC_LBRC:
             if (pressed) {
                 if ((mods | oneshot_mods) & MOD_MASK_SHIFT) {
-                    add_braces("{}", mods, oneshot_mods);
+                    add_braces(PSTR("{}"), mods, oneshot_mods);
                 } else {
-                    add_braces("[]", mods, oneshot_mods);
+                    add_braces(PSTR("[]"), mods, oneshot_mods);
                 }
             }
             return false;
@@ -215,7 +220,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case KC_9:
             if (pressed) {
                 if ((mods | oneshot_mods) & MOD_MASK_SHIFT) {
-                    add_braces("()", mods, oneshot_mods);
+                    add_braces(PSTR("()"), mods, oneshot_mods);
                 } else {
                     return true;
                 }
@@ -225,7 +230,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case KC_COMM:
             if (pressed) {
                 if ((mods | oneshot_mods) & MOD_MASK_SHIFT) {
-                    add_braces("<>", mods, oneshot_mods);
+                    add_braces(PSTR("<>"), mods, oneshot_mods);
                 } else {
                     return true;
                 }
