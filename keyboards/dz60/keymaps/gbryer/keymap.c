@@ -155,8 +155,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (taunt_mode_set) {
         if (pressed) {
             if (keycode != KC_SPC) {
-                register_code(KC_CAPS);
-                unregister_code(KC_CAPS);
+                int r = rand() % 4;
+                if (r != 1) {
+                    register_code(KC_CAPS);
+                    unregister_code(KC_CAPS);
+                }
             }
         }
     }
@@ -224,7 +227,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 if ((mods | oneshot_mods) & MOD_MASK_SHIFT) {
                     add_braces(PSTR("()"), mods, oneshot_mods);
                 } else {
-                    return true;
+                    tap_code(KC_9);
                 }
             }
             return false;
@@ -234,7 +237,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 if ((mods | oneshot_mods) & MOD_MASK_SHIFT) {
                     add_braces(PSTR("<>"), mods, oneshot_mods);
                 } else {
-                    return true;
+                    tap_code(KC_COMM);
                 }
             }
             return false;
