@@ -27,6 +27,15 @@ enum custom_keycodes {
         TD_SHIFT
     };
 
+typedef enum {
+    TD_NONE,
+    TD_UNKNOWN,
+    TD_SINGLE_TAP,
+    TD_SINGLE_HOLD,
+    TD_DOUBLE_SINGLE_TAP
+} td_state_t;
+
+static td_state_t td_state;
 
 bool game_chat_set;
 void game_chat_enable(void);
@@ -35,13 +44,18 @@ void game_chat_disable(void);
 static void sentence_end(qk_tap_dance_state_t *state, void *user_data);
 void sentence_end_finished (qk_tap_dance_state_t *state, void *user_data);
 
+void shift_start(qk_tap_dance_state_t *state, void *user_data);
+void shift_end (qk_tap_dance_state_t *state, void *user_data);
+void shift_reset (qk_tap_dance_state_t *state, void *user_data);
+
 
 bool taunt_mode_set = false;
 
 // Tap Dance definitions
 qk_tap_dance_action_t tap_dance_actions[] = {
         [TD_DOT]  = ACTION_TAP_DANCE_FN_ADVANCED(sentence_end, sentence_end_finished, NULL),
-        [TD_SHIFT] = ACTION_TAP_DANCE_DOUBLE(KC_LSFT, KC_CAPS)
+        [TD_SHIFT] = ACTION_TAP_DANCE_FN_ADVANCED(shift_start, shift_end, shift_reset)
+//        [TD_SHIFT] = ACTION_TAP_DANCE_DOUBLE(KC_LSFT, KC_CAPS)
 };
 
 
@@ -73,7 +87,49 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
+td_state_t cur_dance(qk_tap_dance_state_t *state) {
+    if (state->count == 1) {
+        if (state->interrupted || !state->pressed) return TD_SINGLE_TAP;
+        else return TD_SINGLE_HOLD;
+    }
 
+    if (state->count == 2) return TD_DOUBLE_SINGLE_TAP;
+    else return TD_UNKNOWN; // Any number higher than the maximum state value you return above
+}
+
+void shift_start(qk_tap_dance_state_t *state, void *user_data) {
+    td_state = cur_dance(state);
+    switch (td_state) {
+        case TD_SINGLE_HOLD:
+            register_mods(MOD_BIT(KC_LSFT));
+            break;
+        default:
+            break;
+    }
+};
+
+void shift_end (qk_tap_dance_state_t *state, void *user_data) {
+
+    switch (td_state) {
+        case TD_DOUBLE_SINGLE_TAP:
+            register_code16(KC_CAPS);
+            break;
+        default:
+            break;
+    }
+}
+
+void shift_reset (qk_tap_dance_state_t *state, void *user_data) {
+
+    switch (td_state) {
+        case TD_DOUBLE_SINGLE_TAP:
+            unregister_code16(KC_CAPS);
+            break;
+        default:
+    }
+
+    unregister_mods(MOD_BIT(KC_LSFT));
+}
 
 
 static void sentence_end(qk_tap_dance_state_t *state, void *user_data) {
