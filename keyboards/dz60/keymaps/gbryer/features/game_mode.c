@@ -1,17 +1,21 @@
 #include "game_mode.h"
 
+
 bool is_game_chat_set = false;
-int game_layer;
-uint16_t game_keycode;
+//int game_layer;
+//uint16_t game_keycode;
+//
+//void setup_game_mode(int game_layer, uint16_t game_keycode) {
+//    game_layer = layer;
+//    game_keycode = sel_keycode;
+//}
 
-void setup_game_mode(int layer, uint16_t sel_keycode) {
-    game_layer = layer;
-    game_keycode = sel_keycode;
-}
 
-bool process_game_mode(uint16_t keycode, keyrecord_t *record) {
+
+bool process_game_mode(uint16_t keycode, keyrecord_t *record, int game_layer, uint16_t game_keycode) {
 
     if (keycode == game_keycode && record->event.pressed) {
+        uprintf("Toggle Game Mode\n");
         layer_invert(game_layer);
         return true;
     }
@@ -19,15 +23,16 @@ bool process_game_mode(uint16_t keycode, keyrecord_t *record) {
     return false;
 }
 
-bool process_game_mode_chat(uint16_t keycode, keyrecord_t *record, uint16_t game_chat_keycode,
+bool process_game_mode_chat(uint16_t keycode, keyrecord_t *record, int game_layer, uint16_t game_keycode, uint16_t game_chat_keycode,
                             uint16_t normal_chat_keycode) {
 
-    if (keycode == KC_ESC) {
+    if (keycode == KC_GESC) {
 
         if (is_game_chat_set && record->event.pressed) {  // Checks if KC_GAME_CHAT was pressed ingame
             tap_code(KC_ESC);
             is_game_chat_set = false;
             layer_invert(game_layer);                     // Switches back to GAMING layer after chatting
+            uprintf("Escape Game Chat\n");
         }
         return true; // Let QMK handle the rest
 
@@ -37,6 +42,7 @@ bool process_game_mode_chat(uint16_t keycode, keyrecord_t *record, uint16_t game
             tap_code(normal_chat_keycode);
             is_game_chat_set = false;
             layer_invert(game_layer);                     // Switches back to GAMING layer after chatting
+            uprintf("Escape Game Chat\n");
         }
         return true; // Let QMK handle the rest
 
@@ -46,6 +52,7 @@ bool process_game_mode_chat(uint16_t keycode, keyrecord_t *record, uint16_t game
             tap_code(normal_chat_keycode);
             layer_invert(game_layer);
             is_game_chat_set = true;
+            uprintf("Enter Game Chat\n");
         }
         return false;
 
@@ -55,3 +62,8 @@ bool process_game_mode_chat(uint16_t keycode, keyrecord_t *record, uint16_t game
     return false;
 
 }
+
+
+
+
+

@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include "quantum.h"
 #include "send_string.h"
+#include "print.h"
 
 
 #define KC_FUNCTION(KEY) LT(_FUNCTION, KEY)
@@ -52,7 +53,6 @@ void super_start(qk_tap_dance_state_t *state, void *user_data);
 void super_end (qk_tap_dance_state_t *state, void *user_data);
 void super_reset (qk_tap_dance_state_t *state, void *user_data);
 
-
 //bool taunt_mode_set = false;
 
 // Tap Dance definitions
@@ -63,8 +63,9 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 };
 
 
-void keyboard_pre_init_user(void) {
-    setup_game_mode(KC_GAMING, _GAMING);
+void keyboard_post_init_user(void) {
+//    setup_game_mode(KC_GAMING, _GAMING);
+//    debug_enable=true;
 }
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -179,6 +180,10 @@ void super_reset (qk_tap_dance_state_t *state, void *user_data) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
+#ifdef CONSOLE_ENABLE
+    uprintf("KL: kc: 0x%04X, col: %u, row: %u, pressed: %b, time: %u, interrupt: %b, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
+#endif
+
     if (!process_select_word(keycode, record, KC_SELECT_WORD)) {
         return false;
     }
@@ -187,7 +192,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
     }
 
-    if (process_game_mode(keycode, record))
+    if (process_game_mode(keycode, record, _GAMING, KC_GAMING))
     {
         return true;
     }
@@ -196,10 +201,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
     }
 
-    if (process_game_mode_chat(keycode, record, KC_GAME_CHAT, KC_ENT))
+    if (process_game_mode_chat(keycode, record, _GAMING, KC_GAMING, KC_GAME_CHAT, KC_ENT))
     {
         return true;
     }
 
     return true;
 }
+
+
+
