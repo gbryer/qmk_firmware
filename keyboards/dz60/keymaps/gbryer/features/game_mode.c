@@ -17,6 +17,7 @@ bool process_game_mode(uint16_t keycode, keyrecord_t *record, int game_layer, ui
     if (keycode == game_keycode && record->event.pressed) {
         uprintf("Toggle Game Mode\n");
         layer_invert(game_layer);
+
         return true;
     }
 

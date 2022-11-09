@@ -194,17 +194,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     if (process_game_mode(keycode, record, _GAMING, KC_GAMING))
     {
+        if (layer_state_is(_GAMING)) {
+            unregister_code16(KC_CAPS);
+        }
         return true;
     }
 
-    if (process_open_brackets(keycode, record)) {
-        return false;
-    }
+//    if (process_open_brackets(keycode, record)) {
+//        return false;
+//    }
 
-    if (process_game_mode_chat(keycode, record, _GAMING, KC_GAMING, KC_GAME_CHAT, KC_ENT))
-    {
-        return true;
-    }
+//    if (process_game_mode_chat(keycode, record, _GAMING, KC_GAMING, KC_GAME_CHAT, KC_ENT))
+//    {
+//        return true;
+//    }
 
     return true;
 }
