@@ -15,7 +15,6 @@ bool is_game_chat_set = false;
 bool process_game_mode(uint16_t keycode, keyrecord_t *record, int game_layer, uint16_t game_keycode) {
 
     if (keycode == game_keycode && record->event.pressed) {
-        uprintf("Toggle Game Mode\n");
         layer_invert(game_layer);
 
         return true;

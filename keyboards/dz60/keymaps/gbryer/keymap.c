@@ -8,6 +8,8 @@
 #include "send_string.h"
 #include "print.h"
 
+/// HOW TO FLASH
+/// qmk flash -kb dz60 -km gbryer -e AVR_CFLAGS="-Wno-array-bounds"
 
 #define KC_FUNCTION(KEY) LT(_FUNCTION, KEY)
 
@@ -96,6 +98,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
+bool caps_enabled = false;
+
 td_state_t cur_dance(qk_tap_dance_state_t *state) {
     if (state->count == 1) {
         if (state->interrupted || !state->pressed) return TD_SINGLE_TAP;
@@ -122,6 +126,7 @@ void shift_end (qk_tap_dance_state_t *state, void *user_data) {
     switch (td_state) {
         case TD_DOUBLE_SINGLE_TAP:
             register_code16(KC_CAPS);
+            caps_enabled = true;
             break;
         default:
             break;
@@ -133,6 +138,7 @@ void shift_reset (qk_tap_dance_state_t *state, void *user_data) {
     switch (td_state) {
         case TD_DOUBLE_SINGLE_TAP:
             unregister_code16(KC_CAPS);
+            caps_enabled = false;
             break;
         default:
     }
@@ -180,9 +186,9 @@ void super_reset (qk_tap_dance_state_t *state, void *user_data) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
-#ifdef CONSOLE_ENABLE
-    uprintf("KL: kc: 0x%04X, col: %u, row: %u, pressed: %b, time: %u, interrupt: %b, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
-#endif
+//#ifdef CONSOLE_ENABLE
+//    uprintf("KL: kc: 0x%04X, col: %u, row: %u, pressed: %b, time: %u, interrupt: %b, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
+//#endif
 
     if (!process_select_word(keycode, record, KC_SELECT_WORD)) {
         return false;
@@ -195,7 +201,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (process_game_mode(keycode, record, _GAMING, KC_GAMING))
     {
         if (layer_state_is(_GAMING)) {
-            unregister_code16(KC_CAPS);
+            if (caps_enabled) {
+                tap_code16(KC_CAPS);
+            }
+            uprintf("[Game Mode] true\n");
+        } else {
+            uprintf("[Game Mode] false\n");
         }
         return true;
     }
