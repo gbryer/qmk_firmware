@@ -24,7 +24,8 @@ enum custom_keycodes {
     KC_GAMING = SAFE_RANGE,
     KC_GAME_CHAT,
     KC_SELECT_WORD,
-    KC_TAUNT_MODE // https://github.com/daniel5151/qmk_firmware/blob/discipline/keyboards/coseyfannitutti/discipline/keymaps/prilik/keymap.c#L145
+    KC_TAUNT_MODE, // https://github.com/daniel5151/qmk_firmware/blob/discipline/keyboards/coseyfannitutti/discipline/keymaps/prilik/keymap.c#L145
+    KC_CTRL_SCRL_LIBVIRT_INPUT_GRAB // https://libvirt.org/formatdomain.html#input-devices
 };
 
     enum {
@@ -90,7 +91,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_FUNCTION] = LAYOUT(
             KC_GAMING,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_F13, _______,
-            _______, _______, _______, _______, _______, KC_TAUNT_MODE, _______, _______, _______, _______, KC_PSCR, _______, _______, RESET,
+            KC_CTRL_SCRL_LIBVIRT_INPUT_GRAB, _______, _______, _______, _______, KC_TAUNT_MODE, _______, _______, _______, _______, KC_PSCR, _______, _______, RESET,
             _______, _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, _______, _______,          KC_LOCK,
             _______, _______, _______, _______, _______, _______, _______, _______, KC_SELECT_WORD, BL_DEC, BL_INC, _______, _______, _______,
             _______, _______, _______,                   _______, _______, _______,          KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, KC_MPLY
@@ -205,6 +206,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             uprintf("[Game Mode] 0\n");
         }
         return true;
+    }
+
+    if (keycode == KC_CTRL_SCRL_LIBVIRT_INPUT_GRAB && record->event.pressed) {
+
+        // Hold ctrl, tap scroll lock, release ctrl, tap scroll lock
+        register_code(KC_RCTL);
+        tap_code16(KC_SCROLL_LOCK);
+        unregister_code(KC_RCTL);
+        tap_code16(KC_SCROLL_LOCK);
+
+        return false;
     }
 
 //    if (process_open_brackets(keycode, record)) {
