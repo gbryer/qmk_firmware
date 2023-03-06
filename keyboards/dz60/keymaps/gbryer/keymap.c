@@ -179,6 +179,16 @@ void super_reset (qk_tap_dance_state_t *state, void *user_data) {
     unregister_mods(MOD_BIT(KC_LGUI));
 }
 
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case TD(TD_SHIFT):
+            return TAPPING_TERM;
+        case KC_FUNCTION(KC_F15):
+            return 150;
+        default:
+            return TAPPING_TERM;
+    }
+}
 
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
