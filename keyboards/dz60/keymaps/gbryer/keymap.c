@@ -3,6 +3,7 @@
 #include "features/open_brackets.h"
 #include "features/taunt_mode.h"
 #include "features/game_mode.h"
+#include "features/alternate_text_mode.h"
 #include <stdio.h>
 #include "quantum.h"
 #include "send_string.h"
@@ -25,7 +26,8 @@ enum custom_keycodes {
     KC_GAME_CHAT,
     KC_SELECT_WORD,
     KC_TAUNT_MODE, // https://github.com/daniel5151/qmk_firmware/blob/discipline/keyboards/coseyfannitutti/discipline/keymaps/prilik/keymap.c#L145
-    KC_LIBVIRT_INPUT_GRAB // https://libvirt.org/formatdomain.html#input-devices
+    KC_LIBVIRT_INPUT_GRAB, // https://libvirt.org/formatdomain.html#input-devices
+    KC_UPSIDE_DOWN_MODE,
 };
 
     enum {
@@ -91,7 +93,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_FUNCTION] = LAYOUT(
             KC_GAMING,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_F13, _______,
-            KC_LIBVIRT_INPUT_GRAB, KC_SCROLL_LOCK, _______, _______, _______, KC_TAUNT_MODE, _______, _______, _______, _______, KC_PSCR, _______, _______, RESET,
+            KC_LIBVIRT_INPUT_GRAB, KC_SCROLL_LOCK, _______, _______, _______, KC_TAUNT_MODE, _______, KC_UPSIDE_DOWN_MODE, _______, _______, KC_PSCR, _______, _______, RESET,
             _______, _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, _______, _______,          KC_LOCK,
             _______, _______, _______, _______, _______, _______, _______, _______, KC_SELECT_WORD, BL_DEC, BL_INC, _______, _______, _______,
             _______, _______, _______,                   _______, _______, _______,          KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, KC_MPLY
@@ -190,6 +192,63 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     }
 }
 
+const char* const upside_down_chars[26] = {
+    "ɐ", // a
+    "q", // b
+    "ɔ", // c
+    "p", // d
+    "ǝ", // e
+    "ɟ", // f
+    "ƃ", // g
+    "ɥ", // h
+    "ᴉ", // i
+    "ɾ", // j
+    "ʞ", // k
+    "l", // l
+    "ɯ", // m
+    "u", // n
+    "o", // o
+    "d", // p
+    "b", // q
+    "ɹ", // r
+    "s", // s
+    "ʇ", // t
+    "n", // u
+    "ʌ", // v
+    "ʍ", // w
+    "x", // x
+    "ʎ", // y
+    "z"  // z
+};
+
+const char* const circled_chars[26] = {
+    "ⓐ", // a
+    "ⓑ", // b
+    "ⓒ", // c
+    "ⓓ", // d
+    "ⓔ", // e
+    "ⓕ", // f
+    "ⓖ", // g
+    "ⓗ", // h
+    "ⓘ", // i
+    "ⓙ", // j
+    "ⓚ", // k
+    "ⓛ", // l
+    "ⓜ", // m
+    "ⓝ", // n
+    "ⓞ", // o
+    "ⓟ", // p
+    "ⓠ", // q
+    "ⓡ", // r
+    "ⓢ", // s
+    "ⓣ", // t
+    "ⓤ", // u
+    "ⓥ", // v
+    "ⓦ", // w
+    "ⓧ", // x
+    "ⓨ", // y
+    "ⓩ"  // z
+};
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
@@ -202,6 +261,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
 
     if (process_taunt_mode(keycode, record, KC_TAUNT_MODE)) {
+        return false;
+    }
+
+    if (process_alternate_text_mode(0, keycode, record, KC_UPSIDE_DOWN_MODE, *upside_down_chars, NULL)) {
         return false;
     }
 

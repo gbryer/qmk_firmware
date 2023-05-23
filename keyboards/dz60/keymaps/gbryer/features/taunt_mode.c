@@ -1,11 +1,35 @@
 #include "taunt_mode.h"
 
+bool mode_set = false;
 
-bool taunt_mode_set = false;
+bool is_caps_enabled(void) {
+    led_t led_state = host_keyboard_led_state();
+    return led_state.caps_lock;
+}
 
 bool process_taunt_mode(uint16_t keycode, keyrecord_t *record, uint16_t sel_keycode) {
+    if (keycode == sel_keycode && record->event.pressed) {
 
-    if (taunt_mode_set) {
+        mode_set = !mode_set;
+
+        // when it's turned on, toggle caps lock (makes first letter lowercase)
+        if (mode_set) {
+            if (!is_caps_enabled()) {
+                register_code(KC_CAPS);
+                unregister_code(KC_CAPS);
+            }
+        } else {
+            if (is_caps_enabled()) {
+                register_code(KC_CAPS);
+                unregister_code(KC_CAPS);
+            }
+        }
+
+
+        return true;
+    }
+
+    if (mode_set) {
         if (record->event.pressed) {
             if (keycode != KC_SPC) {
                 int r = rand() % 4;
@@ -15,16 +39,6 @@ bool process_taunt_mode(uint16_t keycode, keyrecord_t *record, uint16_t sel_keyc
                 }
             }
         }
-    }
-
-    if (keycode == sel_keycode && record->event.pressed) {
-        taunt_mode_set = !taunt_mode_set;
-        // when it's turned on, toggle caps lock (makes first letter lowercase)
-        if (taunt_mode_set) {
-            register_code(KC_CAPS);
-            unregister_code(KC_CAPS);
-        }
-        return true;
     }
 
     return false;

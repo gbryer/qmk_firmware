@@ -18,10 +18,12 @@ RGBLIGHT_ENABLE = no       # Enable keyboard RGB underglow
 AUDIO_ENABLE = no           # Audio output
 KEY_LOCK_ENABLE = yes
 TAP_DANCE_ENABLE = yes
+UNICODE_ENABLE = yes
 
 LAYOUTS = 60_ansi 60_ansi_arrow_split_bs_7u_spc 60_ansi_arrow 60_ansi_split_bs_rshift 60_hhkb 60_iso 60_abnt2 60_tsangan_hhkb
 
 SRC += features/select_word.c
 SRC += features/open_brackets.c
 SRC += features/taunt_mode.c
+SRC += features/alternate_text_mode.c
 SRC += features/game_mode.c
