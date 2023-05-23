@@ -315,6 +315,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
     }
 
+    process_reset_alternate_text_mode(keycode, record, KC_ENT);
+    process_reset_alternate_text_mode(keycode, record, KC_ESC);
+
     if (process_alternate_text_mode(0, keycode, record, KC_UPSIDE_DOWN_TEXT_MODE, upside_down_chars, NULL)) {
         return false;
     }
