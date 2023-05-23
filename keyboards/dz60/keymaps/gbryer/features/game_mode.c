@@ -25,7 +25,7 @@ bool process_game_mode(uint16_t keycode, keyrecord_t *record, int game_layer, ui
 
 bool process_game_mode_chat(uint16_t keycode, keyrecord_t *record, int game_layer, uint16_t game_keycode, uint16_t game_chat_keycode,
                             uint16_t normal_chat_keycode) {
-
+/*
     if (keycode == KC_GESC) {
 
         if (is_game_chat_set && record->event.pressed) {  // Checks if KC_GAME_CHAT was pressed ingame
@@ -56,7 +56,7 @@ bool process_game_mode_chat(uint16_t keycode, keyrecord_t *record, int game_laye
         }
         return false;
 
-    }
+    }*/
 
 
     return false;

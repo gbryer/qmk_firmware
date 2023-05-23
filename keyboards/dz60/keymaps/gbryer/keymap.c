@@ -27,7 +27,10 @@ enum custom_keycodes {
     KC_SELECT_WORD,
     KC_TAUNT_MODE, // https://github.com/daniel5151/qmk_firmware/blob/discipline/keyboards/coseyfannitutti/discipline/keymaps/prilik/keymap.c#L145
     KC_LIBVIRT_INPUT_GRAB, // https://libvirt.org/formatdomain.html#input-devices
-    KC_UPSIDE_DOWN_MODE,
+    KC_UPSIDE_DOWN_TEXT_MODE,
+    KC_CIRCLE_TEXT_MODE,
+    KC_SCRIPT_TEXT_MODE,
+    KC_RESET_TEXT_MODE
 };
 
     enum {
@@ -50,18 +53,18 @@ static td_state_t td_state;
 //void game_chat_disable(void);
 
 
-void shift_start(qk_tap_dance_state_t *state, void *user_data);
-void shift_end (qk_tap_dance_state_t *state, void *user_data);
-void shift_reset (qk_tap_dance_state_t *state, void *user_data);
+void shift_start(tap_dance_state_t *state, void *user_data);
+void shift_end (tap_dance_state_t *state, void *user_data);
+void shift_reset (tap_dance_state_t *state, void *user_data);
 
-void super_start(qk_tap_dance_state_t *state, void *user_data);
-void super_end (qk_tap_dance_state_t *state, void *user_data);
-void super_reset (qk_tap_dance_state_t *state, void *user_data);
+void super_start(tap_dance_state_t *state, void *user_data);
+void super_end (tap_dance_state_t *state, void *user_data);
+void super_reset (tap_dance_state_t *state, void *user_data);
 
 //bool taunt_mode_set = false;
 
 // Tap Dance definitions
-qk_tap_dance_action_t tap_dance_actions[] = {
+tap_dance_action_t tap_dance_actions[] = {
 //        [TD_DOT]  = ACTION_TAP_DANCE_FN_ADVANCED(sentence_end, sentence_end_finished, NULL),
         [TD_SHIFT] = ACTION_TAP_DANCE_FN_ADVANCED(shift_start, shift_end, shift_reset),
         [TD_SUPER] = ACTION_TAP_DANCE_FN_ADVANCED(super_start, super_end, super_reset)
@@ -93,15 +96,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_FUNCTION] = LAYOUT(
             KC_GAMING,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_F13, _______,
-            KC_LIBVIRT_INPUT_GRAB, KC_SCROLL_LOCK, _______, _______, _______, KC_TAUNT_MODE, _______, KC_UPSIDE_DOWN_MODE, _______, _______, KC_PSCR, _______, _______, RESET,
-            _______, _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, _______, _______,          KC_LOCK,
-            _______, _______, _______, _______, _______, _______, _______, _______, KC_SELECT_WORD, BL_DEC, BL_INC, _______, _______, _______,
+            KC_LIBVIRT_INPUT_GRAB, KC_SCROLL_LOCK, _______, _______, _______, KC_TAUNT_MODE, KC_CIRCLE_TEXT_MODE, KC_UPSIDE_DOWN_TEXT_MODE, KC_SCRIPT_TEXT_MODE, KC_RESET_TEXT_MODE, KC_PSCR, _______, _______, QK_BOOT,
+            _______, _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, _______, _______,          QK_LOCK,
+            _______, _______, _______, _______, _______, _______, _______, _______, KC_SELECT_WORD, _______, _______, _______, _______, _______,
             _______, _______, _______,                   _______, _______, _______,          KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, KC_MPLY
     ),
 
 };
 
-td_state_t cur_dance(qk_tap_dance_state_t *state) {
+td_state_t cur_dance(tap_dance_state_t *state) {
     if (state->count == 1) {
         if (state->interrupted || !state->pressed) return TD_SINGLE_TAP;
         else return TD_SINGLE_HOLD;
@@ -111,7 +114,7 @@ td_state_t cur_dance(qk_tap_dance_state_t *state) {
     else return TD_UNKNOWN; // Any number higher than the maximum state value you return above
 }
 
-void shift_start(qk_tap_dance_state_t *state, void *user_data) {
+void shift_start(tap_dance_state_t *state, void *user_data) {
     td_state = cur_dance(state);
     switch (td_state) {
         case TD_SINGLE_HOLD:
@@ -122,7 +125,7 @@ void shift_start(qk_tap_dance_state_t *state, void *user_data) {
     }
 };
 
-void shift_end (qk_tap_dance_state_t *state, void *user_data) {
+void shift_end (tap_dance_state_t *state, void *user_data) {
 
     switch (td_state) {
         case TD_DOUBLE_SINGLE_TAP:
@@ -133,7 +136,7 @@ void shift_end (qk_tap_dance_state_t *state, void *user_data) {
     }
 }
 
-void shift_reset (qk_tap_dance_state_t *state, void *user_data) {
+void shift_reset (tap_dance_state_t *state, void *user_data) {
 
     switch (td_state) {
         case TD_DOUBLE_SINGLE_TAP:
@@ -147,7 +150,7 @@ void shift_reset (qk_tap_dance_state_t *state, void *user_data) {
 
 
 
-void super_start(qk_tap_dance_state_t *state, void *user_data) {
+void super_start(tap_dance_state_t *state, void *user_data) {
     td_state = cur_dance(state);
     switch (td_state) {
         case TD_SINGLE_HOLD:
@@ -158,7 +161,7 @@ void super_start(qk_tap_dance_state_t *state, void *user_data) {
     }
 };
 
-void super_end (qk_tap_dance_state_t *state, void *user_data) {
+void super_end (tap_dance_state_t *state, void *user_data) {
 
     switch (td_state) {
         case TD_DOUBLE_SINGLE_TAP:
@@ -169,7 +172,7 @@ void super_end (qk_tap_dance_state_t *state, void *user_data) {
     }
 }
 
-void super_reset (qk_tap_dance_state_t *state, void *user_data) {
+void super_reset (tap_dance_state_t *state, void *user_data) {
 
     switch (td_state) {
         case TD_DOUBLE_SINGLE_TAP:
@@ -191,6 +194,8 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
             return TAPPING_TERM;
     }
 }
+
+
 
 const char* const upside_down_chars[26] = {
     "ɐ", // a
@@ -250,6 +255,48 @@ const char* const circled_chars[26] = {
     "ⓩ"  // z
 };
 
+const char* const circled_number_chars[10] = {
+    "⓪", // 0
+    "①", // 1
+    "②", // 2
+    "③", // 3
+    "④", // 4
+    "⑤", // 5
+    "⑥", // 6
+    "⑦", // 7
+    "⑧", // 8
+    "⑨"  // 9
+};
+
+const char* const script_chars[26] = {
+    "𝓪", // a
+    "𝓫", // b
+    "𝓬", // c
+    "𝓭", // d
+    "𝓮", // e
+    "𝓯", // f
+    "𝓰", // g
+    "𝓱", // h
+    "𝓲", // i
+    "𝓳", // j
+    "𝓴", // k
+    "𝓵", // l
+    "𝓶", // m
+    "𝓷", // n
+    "𝓸", // o
+    "𝓹", // p
+    "𝓺", // q
+    "𝓻", // r
+    "𝓼", // s
+    "𝓽", // t
+    "𝓾", // u
+    "𝓿", // v
+    "𝔀", // w
+    "𝔁", // x
+    "𝔂", // y
+    "𝔃"  // z
+};
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 //#ifdef CONSOLE_ENABLE
@@ -264,7 +311,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
     }
 
-    if (process_alternate_text_mode(0, keycode, record, KC_UPSIDE_DOWN_MODE, *upside_down_chars, NULL)) {
+    if (process_reset_alternate_text_mode(keycode, record, KC_RESET_TEXT_MODE)) {
+        return false;
+    }
+
+    if (process_alternate_text_mode(0, keycode, record, KC_UPSIDE_DOWN_TEXT_MODE, upside_down_chars, NULL)) {
+        return false;
+    }
+
+    if (process_alternate_text_mode(1, keycode, record, KC_CIRCLE_TEXT_MODE, circled_chars, circled_number_chars)) {
+        return false;
+    }
+
+    if (process_alternate_text_mode(2, keycode, record, KC_SCRIPT_TEXT_MODE, script_chars, NULL)) {
         return false;
     }
 
@@ -282,13 +341,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
 
     if (keycode == KC_LIBVIRT_INPUT_GRAB && record->event.pressed) {
-        // Hold ctrl, tap scroll lock, release ctrl, tap scroll lock
-        //        register_code(KC_RCTL);
-        //        tap_code16(KC_SCROLL_LOCK);
-        //        unregister_code(KC_RCTL);
-        //        tap_code16(KC_SCROLL_LOCK);
-
-        //        tap_code16(KC_SCROLL_LOCK);
 
         register_code(KC_LCTL);
         register_code(KC_RCTL);
