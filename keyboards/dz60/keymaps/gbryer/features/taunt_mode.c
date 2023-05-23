@@ -1,4 +1,5 @@
 #include "taunt_mode.h"
+#include "../events/event_dispatcher.h"
 
 bool mode_set = false;
 
@@ -25,6 +26,7 @@ bool process_taunt_mode(uint16_t keycode, keyrecord_t *record, uint16_t sel_keyc
             }
         }
 
+        dispatch_bool_event(EVENT_TAUNT_MODE, mode_set);
 
         return true;
     }

@@ -1,12 +1,16 @@
 #include "alternate_text_mode.h"
+#include "../events/event_dispatcher.h"
 
 long long mode_set_flags = 0;
 int mode = -1;
 
 bool process_reset_alternate_text_mode(uint16_t keycode, keyrecord_t* record, uint16_t sel_keycode) {
     if (keycode == sel_keycode && record->event.pressed) {
-        mode = -1;
-        return true;
+        if (mode != -1) {
+            mode = -1;
+            dispatch_int_event(EVENT_ALTERNATE_TEXT_MODE, mode);
+            return true;
+        }
     }
     return false;
 }
@@ -20,6 +24,8 @@ bool process_alternate_text_mode(int mode_idx, uint16_t keycode, keyrecord_t* re
         } else {
             mode = mode_idx;
         }
+
+        dispatch_int_event(EVENT_ALTERNATE_TEXT_MODE, mode);
 
         return true;
     }

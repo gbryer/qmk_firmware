@@ -336,9 +336,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if ((host_keyboard_leds() & (1<<USB_LED_CAPS_LOCK))) {
                 tap_code16(KC_CAPS);
             }
-            uprintf("[Game Mode] 1\n");
+//            uprintf("[Game Mode] 1\n");
         } else {
-            uprintf("[Game Mode] 0\n");
+//            uprintf("[Game Mode] 0\n");
         }
         return true;
     }
