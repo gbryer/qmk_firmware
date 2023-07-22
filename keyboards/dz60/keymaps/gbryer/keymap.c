@@ -30,7 +30,8 @@ enum custom_keycodes {
     KC_UPSIDE_DOWN_TEXT_MODE,
     KC_CIRCLE_TEXT_MODE,
     KC_SCRIPT_TEXT_MODE,
-    KC_RESET_TEXT_MODE
+    KC_RESET_TEXT_MODE,
+    KC_ALT_ENTER
 };
 
     enum {
@@ -96,8 +97,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_FUNCTION] = LAYOUT(
             KC_GAMING,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_F13, _______,
-            KC_LIBVIRT_INPUT_GRAB, KC_SCROLL_LOCK, _______, _______, _______, KC_TAUNT_MODE, KC_CIRCLE_TEXT_MODE, KC_UPSIDE_DOWN_TEXT_MODE, KC_SCRIPT_TEXT_MODE, KC_RESET_TEXT_MODE, KC_PSCR, _______, _______, QK_BOOT,
-            _______, _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, _______, _______,          QK_LOCK,
+            KC_LIBVIRT_INPUT_GRAB, _______, _______, _______, _______, KC_TAUNT_MODE, KC_CIRCLE_TEXT_MODE, KC_UPSIDE_DOWN_TEXT_MODE, KC_SCRIPT_TEXT_MODE, KC_RESET_TEXT_MODE, KC_PSCR, _______, _______, QK_BOOT,
+            QK_LOCK, _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, _______, _______, KC_ALT_ENTER,
             _______, _______, _______, _______, _______, _______, _______, _______, KC_SELECT_WORD, _______, _______, _______, _______, _______,
             _______, _______, _______,                   _______, _______, _______,          KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, KC_MPLY
     ),
@@ -351,6 +352,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         unregister_code(KC_RCTL);
 
         return false;
+    }
+
+    if (keycode == KC_ALT_ENTER && record->event.pressed) {
+
+            register_code(KC_LALT);
+            register_code(KC_ENT);
+            unregister_code(KC_LALT);
+            unregister_code(KC_ENT);
+
+            return false;
     }
 
 //    if (process_open_brackets(keycode, record)) {
