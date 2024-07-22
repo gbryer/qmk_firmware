@@ -414,7 +414,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (process_game_mode(keycode, record, _GAMING, KC_GAMING))
     {
         if (layer_state_is(_GAMING)) {
-            if ((host_keyboard_leds() & (1<<USB_LED_CAPS_LOCK))) {
+            //if ((host_keyboard_leds() & (1<<USB_LED_CAPS_LOCK))) {
+            if ((host_keyboard_led_state().caps_lock)) {
                 tap_code16(KC_CAPS);
             }
 //            uprintf("[Game Mode] 1\n");
