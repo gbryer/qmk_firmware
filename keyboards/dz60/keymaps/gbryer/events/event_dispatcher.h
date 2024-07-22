@@ -9,6 +9,7 @@ extern "C" {
 typedef enum {
     EVENT_TAUNT_MODE,
     EVENT_ALTERNATE_TEXT_MODE,
+    EVENT_LAYER
 
 } Events;
 

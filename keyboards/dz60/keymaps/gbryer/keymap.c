@@ -8,6 +8,7 @@
 #include "quantum.h"
 #include "send_string.h"
 #include "print.h"
+#include "events/event_dispatcher.h"
 
 /// HOW TO FLASH
 /// qmk flash -kb dz60 -km gbryer -e AVR_CFLAGS="-Wno-array-bounds"
@@ -102,14 +103,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     [_FUNCTION] = LAYOUT(
-            KC_GAMING,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_F13, _______,
+            _______,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_F13, _______,
             KC_LIBVIRT_INPUT_GRAB, _______, _______, _______, _______, KC_TAUNT_MODE, KC_CIRCLE_TEXT_MODE, KC_UPSIDE_DOWN_TEXT_MODE, KC_SCRIPT_TEXT_MODE, KC_RESET_TEXT_MODE, KC_PSCR, _______, _______, QK_BOOT,
-            /*QK_LOCK*/_______, _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, _______, _______, KC_ALT_ENTER,
+            /*QK_LOCK*/_______, _______, _______, _______, _______, KC_GAMING, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, _______, _______, KC_ALT_ENTER,
             _______, _______, _______, _______, _______, _______, _______, _______, KC_SELECT_WORD, _______, _______, _______, _______, _______,
             _______, _______, _______,                   _______, _______, _______,          KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, KC_MPLY
     ),
 
 };
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+    uint8_t layer = get_highest_layer(state);
+    switch (layer) {
+        case _GAMING:
+        case _MAIN:
+            dispatch_int_event(EVENT_LAYER, layer);
+            break;
+    }
+    return state;
+}
 
 td_state_t cur_dance(tap_dance_state_t *state) {
     if (state->count == 1) {
@@ -332,7 +344,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     register_code(KC_S);
                 }
             }
-            return true;
+            return false;
 
         case KC_NULL_A: // Handle left movement
             if (record->event.pressed) {
@@ -348,7 +360,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     register_code(KC_D);
                 }
             }
-            return true;
+            return false;
 
         case KC_NULL_S: // Handle backward movement
             if (record->event.pressed) {
@@ -364,7 +376,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     register_code(KC_W);
                 }
             }
-            return true;
+            return false;
 
         case KC_NULL_D: // Handle right movement
             if (record->event.pressed) {
@@ -380,7 +392,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     register_code(KC_A);
                 }
             }
-            return true;
+            return false;
     }
 
 
