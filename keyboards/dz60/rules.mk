@@ -14,7 +14,7 @@ KEY_LOCK_ENABLE = yes
 TAP_DANCE_ENABLE = yes
 UNICODE_ENABLE = yes
 
-LAYOUTS = 60_ansi 60_ansi_arrow_split_bs_7u_spc 60_ansi_arrow 60_ansi_split_bs_rshift 60_hhkb 60_iso 60_abnt2 60_tsangan_hhkb
+LAYOUTS = 60_ansi 60_ansi_arrow 60_ansi_split_bs_rshift 60_hhkb 60_iso 60_abnt2 60_tsangan_hhkb
 
 SRC += events/event_dispatcher.c
 
