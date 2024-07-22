@@ -14,6 +14,7 @@
 
 #define KC_FUNCTION(KEY) LT(_FUNCTION, KEY)
 
+
 enum layers {
     _DEFAULT = 0,
     _MAIN = 0,
@@ -31,7 +32,12 @@ enum custom_keycodes {
     KC_CIRCLE_TEXT_MODE,
     KC_SCRIPT_TEXT_MODE,
     KC_RESET_TEXT_MODE,
-    KC_ALT_ENTER
+    KC_ALT_ENTER,
+    KC_NULL_W,
+    KC_NULL_A,
+    KC_NULL_S,
+    KC_NULL_D,
+
 };
 
     enum {
@@ -81,16 +87,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_MAIN] = LAYOUT(
             KC_GRAVE/*KC_GESC*/, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSLS, KC_DEL,
-            KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSPC,
-            KC_ESC/*KC_F14*/, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,
+            KC_TAB,  KC_Q,    KC_NULL_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSPC,
+            KC_ESC/*KC_F14*/, KC_NULL_A,    KC_NULL_S,    KC_NULL_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,
             TD(TD_SHIFT),TD(TD_SHIFT),KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT, KC_HOME,
             KC_LCTL, KC_LGUI, KC_LALT,                   KC_SPC,  KC_FUNCTION(KC_F15),  KC_SPC,           KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT,   KC_END
     ),
 
     [_GAMING] = LAYOUT(
             KC_GRAVE/*KC_GESC*/, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSLS, KC_DEL,
-            KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSPC,
-            KC_ESC/*KC_F14*/, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,
+            KC_TAB,  KC_Q,    KC_NULL_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSPC,
+            KC_ESC/*KC_F14*/, KC_NULL_A,    KC_NULL_S,    KC_NULL_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,
             KC_LSFT, KC_LSFT,KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT, KC_HOME,
             KC_LCTL, KC_LGUI, KC_LALT,                   KC_SPC,  KC_FUNCTION(KC_F15),  KC_SPC,           KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT,   KC_END
     ),
@@ -98,7 +104,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_FUNCTION] = LAYOUT(
             KC_GAMING,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_F13, _______,
             KC_LIBVIRT_INPUT_GRAB, _______, _______, _______, _______, KC_TAUNT_MODE, KC_CIRCLE_TEXT_MODE, KC_UPSIDE_DOWN_TEXT_MODE, KC_SCRIPT_TEXT_MODE, KC_RESET_TEXT_MODE, KC_PSCR, _______, _______, QK_BOOT,
-            QK_LOCK, _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, _______, _______, KC_ALT_ENTER,
+            /*QK_LOCK*/_______, _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, _______, _______, KC_ALT_ENTER,
             _______, _______, _______, _______, _______, _______, _______, _______, KC_SELECT_WORD, _______, _______, _______, _______, _______,
             _______, _______, _______,                   _______, _______, _______,          KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, KC_MPLY
     ),
@@ -298,11 +304,85 @@ const char* const script_chars[26] = {
     "𝔃"  // z
 };
 
+bool nmforward = false;
+bool nmback = false;
+bool nmleft = false;
+bool nmright = false;
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 //#ifdef CONSOLE_ENABLE
 //    uprintf("KL: kc: 0x%04X, col: %u, row: %u, pressed: %b, time: %u, interrupt: %b, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
 //#endif
+
+    // https://github.com/chilliams/qmk_firmware/commit/6f7e229d42a9e388aae92163bb3fde39afc2571f
+    // http://wiki.quakeworld.nu/Strafescript
+    switch(keycode) {
+        case KC_NULL_W: // Handle forward movement
+            if (record->event.pressed) {
+                register_code(KC_W);
+                nmforward = true;
+                if (nmback) {
+                    unregister_code(KC_S);
+                }
+            } else {
+                unregister_code(KC_W);
+                nmforward = false;
+                if (nmback) {
+                    register_code(KC_S);
+                }
+            }
+            return true;
+
+        case KC_NULL_A: // Handle left movement
+            if (record->event.pressed) {
+                register_code(KC_A);
+                nmleft = true;
+                if (nmright) {
+                    unregister_code(KC_D);
+                }
+            } else {
+                unregister_code(KC_A);
+                nmleft = false;
+                if (nmright) {
+                    register_code(KC_D);
+                }
+            }
+            return true;
+
+        case KC_NULL_S: // Handle backward movement
+            if (record->event.pressed) {
+                register_code(KC_S);
+                nmback = true;
+                if (nmforward) {
+                    unregister_code(KC_W);
+                }
+            } else {
+                unregister_code(KC_S);
+                nmback = false;
+                if (nmforward) {
+                    register_code(KC_W);
+                }
+            }
+            return true;
+
+        case KC_NULL_D: // Handle right movement
+            if (record->event.pressed) {
+                register_code(KC_D);
+                nmright = true;
+                if (nmleft) {
+                    unregister_code(KC_A);
+                }
+            } else {
+                unregister_code(KC_D);
+                nmright = false;
+                if (nmleft) {
+                    register_code(KC_A);
+                }
+            }
+            return true;
+    }
+
 
     if (!process_select_word(keycode, record, KC_SELECT_WORD)) {
         return false;
