@@ -14,3 +14,7 @@
 #define TAPPING_TERM_PER_KEY
 
 #define UNICODE_SELECTED_MODES UNICODE_MODE_LINUX
+
+// Lower the firmware size:
+#define NO_DEBUG
+#define NO_ACTION_ONESHOT

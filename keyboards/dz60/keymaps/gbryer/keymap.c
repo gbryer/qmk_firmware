@@ -38,21 +38,23 @@ enum custom_keycodes {
     KC_NULL_A,
     KC_NULL_S,
     KC_NULL_D,
+//    KC_ESC_CAPS,
 
 };
 
-    enum {
-        TD_SHIFT = 0,
-        TD_SUPER
-    };
+  //  enum {
+        //TD_ESC_CAPS = 0,
+//        TD_SHIFT = 0,
+//        TD_SUPER
+ //   };
 
-typedef enum {
-    TD_NONE,
-    TD_UNKNOWN,
-    TD_SINGLE_TAP,
-    TD_SINGLE_HOLD,
-    TD_DOUBLE_SINGLE_TAP
-} td_state_t;
+//typedef enum {
+//    TD_NONE,
+//    TD_UNKNOWN,
+//    TD_SINGLE_TAP,
+//    TD_SINGLE_HOLD,
+//    TD_DOUBLE_SINGLE_TAP
+//} td_state_t;
 
 
 //bool game_chat_set;
@@ -60,9 +62,9 @@ typedef enum {
 //void game_chat_disable(void);
 
 
-void shift_start(tap_dance_state_t *state, void *user_data);
-void shift_end (tap_dance_state_t *state, void *user_data);
-void shift_reset (tap_dance_state_t *state, void *user_data);
+//void shift_start(tap_dance_state_t *state, void *user_data);
+//void shift_end (tap_dance_state_t *state, void *user_data);
+//void shift_reset (tap_dance_state_t *state, void *user_data);
 
 //void super_start(tap_dance_state_t *state, void *user_data);
 //void super_end (tap_dance_state_t *state, void *user_data);
@@ -70,12 +72,16 @@ void shift_reset (tap_dance_state_t *state, void *user_data);
 
 //bool taunt_mode_set = false;
 
+//void dance_esc_finished(tap_dance_state_t *state, void *user_data);
+//void dance_esc_reset(tap_dance_state_t *state, void *user_data);
+
 // Tap Dance definitions
 tap_dance_action_t tap_dance_actions[] = {
 //        [TD_DOT]  = ACTION_TAP_DANCE_FN_ADVANCED(sentence_end, sentence_end_finished, NULL),
 //        [TD_SHIFT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, shift_end, shift_reset),
 //    [TD_SHIFT] = ACTION_TAP_DANCE_FN_ADVANCED(shift_start, shift_end, shift_reset),
 //        [TD_SUPER] = ACTION_TAP_DANCE_FN_ADVANCED(super_start, super_end, super_reset)
+//    [TD_ESC_CAPS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_esc_finished, dance_esc_reset),
 };
 
 
@@ -91,13 +97,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
             KC_TAB,  KC_Q,    KC_NULL_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSPC,
             KC_ESC/*KC_F14*/, KC_NULL_A,    KC_NULL_S,    KC_NULL_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,
             /*TD(TD_SHIFT)*/SC_LSPO, SC_LSPO, KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, SC_RSPC, KC_HOME,
-            KC_LCTL, MT(MOD_LGUI, KC_CAPS), KC_LALT,                   KC_SPC,  KC_FUNCTION(KC_F15),  KC_SPC,           KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT,   KC_END
+            KC_LCTL, KC_LGUI, KC_LALT,                   KC_SPC,  KC_FUNCTION(KC_F15),  KC_SPC,           KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT,   KC_END
     ),
 
     [_GAMING] = LAYOUT(
-            KC_GRAVE/*KC_GESC*/, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSLS, KC_DEL,
+            KC_ESC/*KC_GESC*/, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSLS, KC_DEL,
             KC_TAB,  KC_Q,    KC_NULL_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSPC,
-            KC_ESC/*KC_F14*/, KC_NULL_A,    KC_NULL_S,    KC_NULL_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,
+            KC_GRAVE/*KC_F14*/, KC_NULL_A,    KC_NULL_S,    KC_NULL_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,
             KC_LSFT, KC_LSFT,KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT, KC_HOME,
             KC_LCTL, KC_LGUI, KC_LALT,                   KC_SPC,  KC_FUNCTION(KC_F15),  KC_SPC,           KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT,   KC_END
     ),
@@ -105,7 +111,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_FUNCTION] = LAYOUT(
             _______,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_F13, _______,
             KC_LIBVIRT_INPUT_GRAB, _______, _______, _______, _______, KC_TAUNT_MODE, KC_CIRCLE_TEXT_MODE, KC_UPSIDE_DOWN_TEXT_MODE, KC_SCRIPT_TEXT_MODE, KC_RESET_TEXT_MODE, KC_PSCR, _______, _______, QK_BOOT,
-            /*QK_LOCK*/_______, _______, _______, _______, _______, KC_GAMING, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, _______, _______, KC_ALT_ENTER,
+            KC_CAPS, _______, _______, _______, _______, KC_GAMING, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, _______, _______, KC_ALT_ENTER,
             _______, _______, _______, _______, _______, _______, _______, _______, KC_SELECT_WORD, _______, _______, _______, _______, _______,
             _______, _______, _______,                   _______, _______, _______,          KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, KC_MPLY
     ),
@@ -122,6 +128,17 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     }
     return state;
 }
+
+//void dance_esc_finished(tap_dance_state_t *state, void *user_data) {
+//    if (state->pressed) {
+//        tap_code(KC_CAPS);
+//    } else {
+//        tap_code(KC_ESC);  // Tap for Escape
+//    }
+//}
+//
+//void dance_esc_reset(tap_dance_state_t *state, void *user_data) {
+//}
 
 //static td_state_t td_state;
 
@@ -330,8 +347,6 @@ bool nmback = false;
 bool nmleft = false;
 bool nmright = false;
 
-uint8_t mod_state;
-
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 //#ifdef CONSOLE_ENABLE
@@ -406,41 +421,27 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
     }
 
-    mod_state = get_mods();
-
-    // https://github.com/qmk/qmk_firmware/blob/master/docs/feature_advanced_keycodes.md#shift--backspace-for-delete-shift-backspace-for-delete
-    if (keycode == KC_BACKSPACE) {
-        // Initialize a boolean variable that keeps track
-        // of the delete key status: registered or not?
-        static bool delkey_registered;
-        if (record->event.pressed) {
-            // Detect the activation of either shift keys
-            if (mod_state & MOD_MASK_SHIFT) {
-                // First temporarily canceling both shifts so that
-                // shift isn't applied to the KC_DEL keycode
-                del_mods(MOD_MASK_SHIFT);
-                register_code(KC_DEL);
-                // Update the boolean variable to reflect the status of KC_DEL
-                delkey_registered = true;
-                // Reapplying modifier state so that the held shift key(s)
-                // still work even after having tapped the Backspace/Delete key.
-                set_mods(mod_state);
-                return false;
-            }
-        } else { // on release of KC_BSPC
-            // In case KC_DEL is still being sent even after the release of KC_BSPC
-            if (delkey_registered) {
-                unregister_code(KC_DEL);
-                delkey_registered = false;
-                return false;
-            }
-        }
-        // Let QMK process the KC_BSPC keycode as usual outside of shift
-        return true;
-    }
-
-
-
+//    static uint16_t esc_caps_timer;
+//
+//
+//    if (keycode == KC_ESC_CAPS) {
+//        if (record->event.pressed) {
+//            // Start the timer when key is pressed
+//            esc_caps_timer = timer_read();
+//        } else {
+//            // Key is released, check how long it was held
+//            if (timer_elapsed(esc_caps_timer) > 200) { // Adjust hold threshold if necessary
+//                // Key was held, trigger Caps Lock
+//                register_code(KC_CAPS);
+//                unregister_code(KC_CAPS);
+//            } else {
+//                // Key was tapped, send Esc
+//                tap_code(KC_ESC);
+//            }
+//        }
+//        return false;  // Skip further processing to prevent default behavior
+//    }
+//
 
     if (!process_select_word(keycode, record, KC_SELECT_WORD)) {
         return false;
