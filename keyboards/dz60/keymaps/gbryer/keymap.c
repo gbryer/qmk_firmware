@@ -118,18 +118,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
+
 layer_state_t layer_state_set_user(layer_state_t state) {
     uint8_t layer = get_highest_layer(state);
+
     switch (layer) {
         case _GAMING:
             autocorrect_disable();
-            dispatch_int_event(EVENT_LAYER, layer);
             break;
         case _MAIN:
             autocorrect_enable();
-            dispatch_int_event(EVENT_LAYER, layer);
             break;
+        default:
+            return state;
     }
+
+    dispatch_int_event(EVENT_LAYER, layer);
+
     return state;
 }
 
@@ -474,19 +479,28 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
     }
 
-    if (process_game_mode(keycode, record, _GAMING, KC_GAMING))
-    {
-        if (layer_state_is(_GAMING)) {
-            //if ((host_keyboard_leds() & (1<<USB_LED_CAPS_LOCK))) {
-            if ((host_keyboard_led_state().caps_lock)) {
-                tap_code16(KC_CAPS);
-            }
-//            uprintf("[Game Mode] 1\n");
-        } else {
-//            uprintf("[Game Mode] 0\n");
+    // Toggle GAMING layer and turn on caps lock if enabled
+    if (keycode == KC_GAMING && record->event.pressed) {
+        layer_invert(_GAMING);
+        if ((host_keyboard_led_state().caps_lock)) {
+            tap_code16(KC_CAPS);
         }
-        return true;
+        return false;
     }
+
+//    if (process_game_mode(keycode, record, _GAMING, KC_GAMING))
+//    {
+//        if (layer_state_is(_GAMING)) {
+//            //if ((host_keyboard_leds() & (1<<USB_LED_CAPS_LOCK))) {
+//            if ((host_keyboard_led_state().caps_lock)) {
+//                tap_code16(KC_CAPS);
+//            }
+////            uprintf("[Game Mode] 1\n");
+//        } else {
+////            uprintf("[Game Mode] 0\n");
+//        }
+//        return true;
+//    }
 
     if (keycode == KC_LIBVIRT_INPUT_GRAB && record->event.pressed) {
 
