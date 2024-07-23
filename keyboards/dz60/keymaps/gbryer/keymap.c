@@ -38,56 +38,15 @@ enum custom_keycodes {
     KC_NULL_A,
     KC_NULL_S,
     KC_NULL_D,
-//    KC_ESC_CAPS,
 
 };
 
-  //  enum {
-        //TD_ESC_CAPS = 0,
-//        TD_SHIFT = 0,
-//        TD_SUPER
- //   };
-
-//typedef enum {
-//    TD_NONE,
-//    TD_UNKNOWN,
-//    TD_SINGLE_TAP,
-//    TD_SINGLE_HOLD,
-//    TD_DOUBLE_SINGLE_TAP
-//} td_state_t;
-
-
-//bool game_chat_set;
-//void game_chat_enable(void);
-//void game_chat_disable(void);
-
-
-//void shift_start(tap_dance_state_t *state, void *user_data);
-//void shift_end (tap_dance_state_t *state, void *user_data);
-//void shift_reset (tap_dance_state_t *state, void *user_data);
-
-//void super_start(tap_dance_state_t *state, void *user_data);
-//void super_end (tap_dance_state_t *state, void *user_data);
-//void super_reset (tap_dance_state_t *state, void *user_data);
-
-//bool taunt_mode_set = false;
-
-//void dance_esc_finished(tap_dance_state_t *state, void *user_data);
-//void dance_esc_reset(tap_dance_state_t *state, void *user_data);
-
-// Tap Dance definitions
-tap_dance_action_t tap_dance_actions[] = {
-//        [TD_DOT]  = ACTION_TAP_DANCE_FN_ADVANCED(sentence_end, sentence_end_finished, NULL),
-//        [TD_SHIFT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, shift_end, shift_reset),
-//    [TD_SHIFT] = ACTION_TAP_DANCE_FN_ADVANCED(shift_start, shift_end, shift_reset),
-//        [TD_SUPER] = ACTION_TAP_DANCE_FN_ADVANCED(super_start, super_end, super_reset)
-//    [TD_ESC_CAPS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_esc_finished, dance_esc_reset),
-};
+//tap_dance_action_t tap_dance_actions[] = {
+//};
 
 
 void keyboard_post_init_user(void) {
-//    setup_game_mode(KC_GAMING, _GAMING);
-//    debug_enable=true;
+    // ...
 }
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -138,112 +97,8 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     return state;
 }
 
-//void dance_esc_finished(tap_dance_state_t *state, void *user_data) {
-//    if (state->pressed) {
-//        tap_code(KC_CAPS);
-//    } else {
-//        tap_code(KC_ESC);  // Tap for Escape
-//    }
-//}
-//
-//void dance_esc_reset(tap_dance_state_t *state, void *user_data) {
-//}
-
-//static td_state_t td_state;
-
-//td_state_t cur_dance(tap_dance_state_t *state) {
-//    if (state->count == 1) {
-//        if (state->interrupted || !state->pressed) {
-//            return TD_SINGLE_TAP;
-//        } else {
-//            return TD_SINGLE_HOLD;
-//        }
-//    }
-//
-//    if (state->count == 2) return TD_DOUBLE_SINGLE_TAP;
-//    else return TD_UNKNOWN; // Any number higher than the maximum state value you return above
-//}
-
-//void shift_start(tap_dance_state_t *state, void *user_data) {
-//    td_state = cur_dance(state);
-//    switch (td_state) {
-//        case TD_SINGLE_TAP:
-////            register_code(KC_9);
-//            break;
-//        case TD_SINGLE_HOLD:
-//            register_mods(MOD_BIT(KC_LSFT));
-//            break;
-//        default:
-//            break;
-//    }
-//};
-
-//bool shift_held = false;
-//
-//void shift_end (tap_dance_state_t *state, void *user_data) {
-//      switch (state->count) {
-//        case 1:
-//            if (state->pressed) {  // Key is held, not tapped
-//                register_code(KC_LSFT);
-//                shift_held = true;
-//            } else {  // Key was tapped
-//                tap_code(KC_D);
-//            }
-//            break;
-//        case 2:
-//            tap_code(KC_CAPS);  // Double tap
-//            break;
-//    }
-//}
-//
-//void shift_reset (tap_dance_state_t *state, void *user_data) {
-//    if (shift_held) {
-//        unregister_code(KC_LSFT); // Unregister shift only if it was held
-//    }
-//}
-
-
-
-//void super_start(tap_dance_state_t *state, void *user_data) {
-//    td_state = cur_dance(state);
-//    switch (td_state) {
-//        case TD_SINGLE_HOLD:
-//            register_mods(MOD_BIT(KC_LGUI));
-//            break;
-//        default:
-//            break;
-//    }
-//};
-//
-//void super_end (tap_dance_state_t *state, void *user_data) {
-//
-//    switch (td_state) {
-//        case TD_DOUBLE_SINGLE_TAP:
-//            register_code16(KC_CAPS);
-//            break;
-//        default:
-//            break;
-//    }
-//}
-//
-//void super_reset (tap_dance_state_t *state, void *user_data) {
-//
-//    switch (td_state) {
-//        case TD_DOUBLE_SINGLE_TAP:
-//            unregister_code16(KC_CAPS);
-//            break;
-//        default:
-//    }
-//
-//    unregister_mods(MOD_BIT(KC_LGUI));
-//}
-
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-//        case TD(TD_SHIFT):
-//            return TAPPING_TERM;
-//        case KC_FUNCTION(KC_F15):
-//            return 150;
         default:
             return TAPPING_TERM;
     }
@@ -430,28 +285,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
     }
 
-//    static uint16_t esc_caps_timer;
-//
-//
-//    if (keycode == KC_ESC_CAPS) {
-//        if (record->event.pressed) {
-//            // Start the timer when key is pressed
-//            esc_caps_timer = timer_read();
-//        } else {
-//            // Key is released, check how long it was held
-//            if (timer_elapsed(esc_caps_timer) > 200) { // Adjust hold threshold if necessary
-//                // Key was held, trigger Caps Lock
-//                register_code(KC_CAPS);
-//                unregister_code(KC_CAPS);
-//            } else {
-//                // Key was tapped, send Esc
-//                tap_code(KC_ESC);
-//            }
-//        }
-//        return false;  // Skip further processing to prevent default behavior
-//    }
-//
-
     if (!process_select_word(keycode, record, KC_SELECT_WORD)) {
         return false;
     }
@@ -488,20 +321,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
     }
 
-//    if (process_game_mode(keycode, record, _GAMING, KC_GAMING))
-//    {
-//        if (layer_state_is(_GAMING)) {
-//            //if ((host_keyboard_leds() & (1<<USB_LED_CAPS_LOCK))) {
-//            if ((host_keyboard_led_state().caps_lock)) {
-//                tap_code16(KC_CAPS);
-//            }
-////            uprintf("[Game Mode] 1\n");
-//        } else {
-////            uprintf("[Game Mode] 0\n");
-//        }
-//        return true;
-//    }
-
     if (keycode == KC_LIBVIRT_INPUT_GRAB && record->event.pressed) {
 
         register_code(KC_LCTL);
@@ -521,15 +340,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
             return false;
     }
-
-//    if (process_open_brackets(keycode, record)) {
-//        return false;
-//    }
-
-//    if (process_game_mode_chat(keycode, record, _GAMING, KC_GAMING, KC_GAME_CHAT, KC_ENT))
-//    {
-//        return true;
-//    }
 
     return true;
 }
