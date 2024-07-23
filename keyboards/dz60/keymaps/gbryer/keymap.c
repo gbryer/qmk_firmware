@@ -54,7 +54,6 @@ typedef enum {
     TD_DOUBLE_SINGLE_TAP
 } td_state_t;
 
-static td_state_t td_state;
 
 //bool game_chat_set;
 //void game_chat_enable(void);
@@ -65,17 +64,18 @@ void shift_start(tap_dance_state_t *state, void *user_data);
 void shift_end (tap_dance_state_t *state, void *user_data);
 void shift_reset (tap_dance_state_t *state, void *user_data);
 
-void super_start(tap_dance_state_t *state, void *user_data);
-void super_end (tap_dance_state_t *state, void *user_data);
-void super_reset (tap_dance_state_t *state, void *user_data);
+//void super_start(tap_dance_state_t *state, void *user_data);
+//void super_end (tap_dance_state_t *state, void *user_data);
+//void super_reset (tap_dance_state_t *state, void *user_data);
 
 //bool taunt_mode_set = false;
 
 // Tap Dance definitions
 tap_dance_action_t tap_dance_actions[] = {
 //        [TD_DOT]  = ACTION_TAP_DANCE_FN_ADVANCED(sentence_end, sentence_end_finished, NULL),
-        [TD_SHIFT] = ACTION_TAP_DANCE_FN_ADVANCED(shift_start, shift_end, shift_reset),
-        [TD_SUPER] = ACTION_TAP_DANCE_FN_ADVANCED(super_start, super_end, super_reset)
+//        [TD_SHIFT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, shift_end, shift_reset),
+//    [TD_SHIFT] = ACTION_TAP_DANCE_FN_ADVANCED(shift_start, shift_end, shift_reset),
+//        [TD_SUPER] = ACTION_TAP_DANCE_FN_ADVANCED(super_start, super_end, super_reset)
 };
 
 
@@ -90,8 +90,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
             KC_GRAVE/*KC_GESC*/, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSLS, KC_DEL,
             KC_TAB,  KC_Q,    KC_NULL_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSPC,
             KC_ESC/*KC_F14*/, KC_NULL_A,    KC_NULL_S,    KC_NULL_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,
-            TD(TD_SHIFT),TD(TD_SHIFT),KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT, KC_HOME,
-            KC_LCTL, KC_LGUI, KC_LALT,                   KC_SPC,  KC_FUNCTION(KC_F15),  KC_SPC,           KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT,   KC_END
+            /*TD(TD_SHIFT)*/SC_LSPO, SC_LSPO, KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, SC_RSPC, KC_HOME,
+            KC_LCTL, MT(MOD_LGUI, KC_CAPS), KC_LALT,                   KC_SPC,  KC_FUNCTION(KC_F15),  KC_SPC,           KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT,   KC_END
     ),
 
     [_GAMING] = LAYOUT(
@@ -123,92 +123,101 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     return state;
 }
 
-td_state_t cur_dance(tap_dance_state_t *state) {
-    if (state->count == 1) {
-        if (state->interrupted || !state->pressed) return TD_SINGLE_TAP;
-        else return TD_SINGLE_HOLD;
-    }
+//static td_state_t td_state;
 
-    if (state->count == 2) return TD_DOUBLE_SINGLE_TAP;
-    else return TD_UNKNOWN; // Any number higher than the maximum state value you return above
-}
+//td_state_t cur_dance(tap_dance_state_t *state) {
+//    if (state->count == 1) {
+//        if (state->interrupted || !state->pressed) {
+//            return TD_SINGLE_TAP;
+//        } else {
+//            return TD_SINGLE_HOLD;
+//        }
+//    }
+//
+//    if (state->count == 2) return TD_DOUBLE_SINGLE_TAP;
+//    else return TD_UNKNOWN; // Any number higher than the maximum state value you return above
+//}
 
-void shift_start(tap_dance_state_t *state, void *user_data) {
-    td_state = cur_dance(state);
-    switch (td_state) {
-        case TD_SINGLE_HOLD:
-            register_mods(MOD_BIT(KC_LSFT));
-            break;
-        default:
-            break;
-    }
-};
+//void shift_start(tap_dance_state_t *state, void *user_data) {
+//    td_state = cur_dance(state);
+//    switch (td_state) {
+//        case TD_SINGLE_TAP:
+////            register_code(KC_9);
+//            break;
+//        case TD_SINGLE_HOLD:
+//            register_mods(MOD_BIT(KC_LSFT));
+//            break;
+//        default:
+//            break;
+//    }
+//};
 
-void shift_end (tap_dance_state_t *state, void *user_data) {
+//bool shift_held = false;
+//
+//void shift_end (tap_dance_state_t *state, void *user_data) {
+//      switch (state->count) {
+//        case 1:
+//            if (state->pressed) {  // Key is held, not tapped
+//                register_code(KC_LSFT);
+//                shift_held = true;
+//            } else {  // Key was tapped
+//                tap_code(KC_D);
+//            }
+//            break;
+//        case 2:
+//            tap_code(KC_CAPS);  // Double tap
+//            break;
+//    }
+//}
+//
+//void shift_reset (tap_dance_state_t *state, void *user_data) {
+//    if (shift_held) {
+//        unregister_code(KC_LSFT); // Unregister shift only if it was held
+//    }
+//}
 
-    switch (td_state) {
-        case TD_DOUBLE_SINGLE_TAP:
-            register_code16(KC_CAPS);
-            break;
-        default:
-            break;
-    }
-}
-
-void shift_reset (tap_dance_state_t *state, void *user_data) {
-
-    switch (td_state) {
-        case TD_DOUBLE_SINGLE_TAP:
-            unregister_code16(KC_CAPS);
-            break;
-        default:
-    }
-
-    unregister_mods(MOD_BIT(KC_LSFT));
-}
 
 
-
-void super_start(tap_dance_state_t *state, void *user_data) {
-    td_state = cur_dance(state);
-    switch (td_state) {
-        case TD_SINGLE_HOLD:
-            register_mods(MOD_BIT(KC_LGUI));
-            break;
-        default:
-            break;
-    }
-};
-
-void super_end (tap_dance_state_t *state, void *user_data) {
-
-    switch (td_state) {
-        case TD_DOUBLE_SINGLE_TAP:
-            register_code16(KC_CAPS);
-            break;
-        default:
-            break;
-    }
-}
-
-void super_reset (tap_dance_state_t *state, void *user_data) {
-
-    switch (td_state) {
-        case TD_DOUBLE_SINGLE_TAP:
-            unregister_code16(KC_CAPS);
-            break;
-        default:
-    }
-
-    unregister_mods(MOD_BIT(KC_LGUI));
-}
+//void super_start(tap_dance_state_t *state, void *user_data) {
+//    td_state = cur_dance(state);
+//    switch (td_state) {
+//        case TD_SINGLE_HOLD:
+//            register_mods(MOD_BIT(KC_LGUI));
+//            break;
+//        default:
+//            break;
+//    }
+//};
+//
+//void super_end (tap_dance_state_t *state, void *user_data) {
+//
+//    switch (td_state) {
+//        case TD_DOUBLE_SINGLE_TAP:
+//            register_code16(KC_CAPS);
+//            break;
+//        default:
+//            break;
+//    }
+//}
+//
+//void super_reset (tap_dance_state_t *state, void *user_data) {
+//
+//    switch (td_state) {
+//        case TD_DOUBLE_SINGLE_TAP:
+//            unregister_code16(KC_CAPS);
+//            break;
+//        default:
+//    }
+//
+//    unregister_mods(MOD_BIT(KC_LGUI));
+//}
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case TD(TD_SHIFT):
-            return TAPPING_TERM;
-        case KC_FUNCTION(KC_F15):
-            return 150;
+//        case TD(TD_SHIFT):
+//            return TAPPING_TERM;
+//        case KC_FUNCTION(KC_F15):
+//            return 150;
         default:
             return TAPPING_TERM;
     }
