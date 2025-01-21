@@ -14,6 +14,7 @@ TAP_DANCE_ENABLE = no
 UNICODE_ENABLE = yes
 CAPS_WORD_ENABLE = no
 AUTOCORRECT_ENABLE = yes
+KEY_OVERRIDE_ENABLE = yes
 
 # Lower the firmware size:
 KEY_LOCK_ENABLE = no
