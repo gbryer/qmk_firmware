@@ -17,14 +17,15 @@
 
 
 enum layers {
-    _DEFAULT = 0,
     _MAIN = 0,
+    _ALT_LAYOUT,
     _GAMING,
-    _FUNCTION
+    _FUNCTION,
 };
 
 enum custom_keycodes {
     KC_GAMING = SAFE_RANGE,
+    KC_LAYOUT,
     KC_GAME_CHAT,
     KC_SELECT_WORD,
     KC_TAUNT_MODE, // https://github.com/daniel5151/qmk_firmware/blob/discipline/keyboards/coseyfannitutti/discipline/keymaps/prilik/keymap.c#L145
@@ -52,11 +53,91 @@ void keyboard_post_init_user(void) {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_MAIN] = LAYOUT(
-            KC_GRAVE/*KC_GESC*/, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSLS, KC_DEL,
+           KC_GRAVE/*KC_GESC*/, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSLS, KC_DEL,
             KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSPC,
             KC_ESC/*KC_F14*/, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,
             /*TD(TD_SHIFT)*/SC_LSPO, SC_LSPO, KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, SC_RSPC, KC_HOME,
             KC_LCTL, KC_LGUI, KC_LALT,                   KC_SPC,  KC_FUNCTION(KC_F15),  KC_SPC,           KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT,   KC_END
+    ),
+
+
+    [_ALT_LAYOUT] = LAYOUT(
+            /* Row 1 (15 keys) */
+            S(KC_4),      /* $ (unshifted)        */
+            S(KC_EQUAL),  /* +                    */
+            KC_LBRC,      /* [                    */
+            S(KC_LBRC),   /* {                    */
+            S(KC_9),      /* (                    */
+            S(KC_7),      /* &                    */
+            KC_EQUAL,     /* =                    */
+            S(KC_0),      /* )                    */
+            S(KC_RBRC),   /* }                    */
+            KC_RBRC,      /* ]                    */
+            S(KC_8),      /* *                    */
+            S(KC_1),      /* !                    */
+            S(KC_5),      /* %                    */
+            S(KC_BSLS),   /* |                    */
+            KC_GRAVE,     /* `                    */
+
+            /* Row 2 (14 keys) */
+            KC_TAB,       /* Tab                   */
+            KC_SCLN,      /* ;                     */
+            KC_COMM,      /* ,                     */
+            KC_DOT,       /* .                     */
+            KC_P,         /* p                     */
+            KC_Y,         /* y                     */
+            KC_F,         /* f                     */
+            KC_G,         /* g                     */
+            KC_C,         /* c                     */
+            KC_R,         /* r                     */
+            KC_L,         /* l                     */
+            KC_SLSH,      /* /  (Shift => ?)       */
+            S(KC_2),      /* @ (example)           */
+            KC_BSPC,      /* Backspace             */
+
+            /* Row 3 (13 keys) */
+            KC_ESC,       /* Escape                */
+            KC_A,         /* a                     */
+            KC_O,         /* o                     */
+            KC_E,         /* e                     */
+            KC_U,         /* u                     */
+            KC_I,         /* i                     */
+            KC_D,         /* d                     */
+            KC_H,         /* h                     */
+            KC_T,         /* t                     */
+            KC_N,         /* n                     */
+            KC_S,         /* s                     */
+            KC_MINS,      /* -  (Shift => _)       */
+                      KC_ENT,      /* Enter (13th position) */
+
+            /* Row 4 (14 keys) */
+            SC_LSPO,      /* Space Cadet LShift    */
+            SC_LSPO,      /* (or use KC_LSFT)      */
+            KC_QUOT,      /* '  (Shift => ")       */
+            KC_Q,         /* q                     */
+            KC_J,         /* j                     */
+            KC_K,         /* k                     */
+            KC_X,         /* x                     */
+            KC_B,         /* b                     */
+            KC_M,         /* m                     */
+            KC_W,         /* w                     */
+            KC_V,         /* v                     */
+            KC_Z,         /* z                     */
+            SC_RSPC,      /* Space Cadet RShift    */
+            KC_HOME,      /* Home                  */
+
+            /* Row 5 (11 keys) */
+            KC_LCTL,      /* Left Ctrl             */
+            KC_LGUI,      /* Left GUI              */
+            KC_LALT,      /* Left Alt              */
+                            KC_SPC,                /* Space */
+            KC_FUNCTION(KC_F15), /* Arbitrary example */
+                            KC_SPC,                /* Space */
+            KC_LEFT,      /* Left arrow            */
+            KC_DOWN,      /* Down arrow            */
+            KC_UP,        /* Up arrow              */
+            KC_RIGHT,     /* Right arrow           */
+            KC_END        /* End                   */
     ),
 
     [_GAMING] = LAYOUT(
@@ -70,7 +151,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_FUNCTION] = LAYOUT(
             _______,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_F13, _______,
             KC_LIBVIRT_INPUT_GRAB, _______, _______, _______, _______, KC_TAUNT_MODE, KC_CIRCLE_TEXT_MODE, KC_UPSIDE_DOWN_TEXT_MODE, KC_SCRIPT_TEXT_MODE, KC_RESET_TEXT_MODE, KC_PSCR, _______, _______, QK_BOOT,
-            KC_CAPS, _______, _______, _______, _______, KC_GAMING, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, _______, _______, KC_ALT_ENTER,
+            KC_CAPS, _______, _______, _______, KC_LAYOUT, KC_GAMING, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, _______, _______, KC_ALT_ENTER,
             _______, _______, _______, _______, _______, _______, _______, _______, KC_SELECT_WORD, _______, _______, _______, _______, _______,
             _______, _______, _______,                   _______, _______, _______,          KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, KC_MPLY
     ),
@@ -82,11 +163,14 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     uint8_t layer = get_highest_layer(state);
 
     switch (layer) {
-        case _GAMING:
-            autocorrect_disable();
-            break;
         case _MAIN:
             autocorrect_enable();
+            break;
+        case _ALT_LAYOUT:
+            autocorrect_enable();
+            break;
+        case _GAMING:
+            autocorrect_disable();
             break;
         default:
             return state;
@@ -103,8 +187,6 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
             return TAPPING_TERM;
     }
 }
-
-
 
 const char* const upside_down_chars[26] = {
     "ɐ", // a
@@ -312,9 +394,22 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
     }
 
-    // Toggle GAMING layer and turn on caps lock if enabled
+    // Toggle GAMING layer and turn off caps lock if enabled
     if (keycode == KC_GAMING && record->event.pressed) {
         layer_invert(_GAMING);
+
+        if ((host_keyboard_led_state().caps_lock)) {
+            tap_code16(KC_CAPS);
+        }
+
+        return false;
+    }
+
+//     Toggle LAYOUT and turn off caps lock if enabled
+    if (keycode == KC_LAYOUT && record->event.pressed) {
+
+        layer_invert(_ALT_LAYOUT);
+
         if ((host_keyboard_led_state().caps_lock)) {
             tap_code16(KC_CAPS);
         }
